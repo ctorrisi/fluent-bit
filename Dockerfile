@@ -1,3 +1,9 @@
+FROM golang:1.15.3 as loki-plugin
+
+COPY ./externals/loki/ /src/loki
+WORKDIR /src/loki
+RUN make clean && make BUILD_IN_CONTAINER=false fluent-bit-plugin
+
 FROM debian:buster as builder
 
 # Fluent Bit version
@@ -96,6 +102,7 @@ COPY --from=builder /lib/x86_64-linux-gnu/libcom_err* /lib/x86_64-linux-gnu/
 COPY --from=builder /lib/x86_64-linux-gnu/libkeyutils* /lib/x86_64-linux-gnu/
 
 COPY --from=builder /fluent-bit /fluent-bit
+COPY --from=loki-plugin /src/loki/cmd/fluent-bit/out_loki.so /fluent-bit/bin
 
 #
 EXPOSE 2020
