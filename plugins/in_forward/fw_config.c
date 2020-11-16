@@ -30,6 +30,7 @@ struct flb_in_fw_config *fw_config_init(struct flb_input_instance *i_ins)
     char tmp[16];
     const char *buffer_size;
     const char *chunk_size;
+    const char *overwrite_tag;
     const char *p;
     struct flb_in_fw_config *config;
 
@@ -59,6 +60,15 @@ struct flb_in_fw_config *fw_config_init(struct flb_input_instance *i_ins)
     else {
         /* Convert KB unit to Bytes */
         config->buffer_chunk_size  = flb_utils_size_to_bytes(chunk_size);
+    }
+
+    /* Overwrite tag? */
+    overwrite_tag = flb_input_get_property("overwrite_tag", i_ins);
+    if (!overwrite_tag) {
+        config->overwrite_tag = FLB_FALSE;
+    }
+    else {
+        config->overwrite_tag = flb_utils_bool(overwrite_tag);
     }
 
     /* Buffer size */

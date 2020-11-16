@@ -248,8 +248,8 @@ int fw_prot_process(struct fw_conn *conn)
     int stag_len;
     int c = 0;
     size_t chunk_id = -1;
-    const char *stag;
-    size_t bytes;
+    const char *stag = NULL;
+    size_t bytes = 0;
     size_t buf_off = 0;
     size_t recv_len;
     size_t gz_size;
@@ -367,8 +367,10 @@ int fw_prot_process(struct fw_conn *conn)
                 return -1;
             }
 
-            stag     = tag.via.str.ptr;
-            stag_len = tag.via.str.size;
+            if (!ctx->overwrite_tag) {
+                stag = tag.via.str.ptr;
+                stag_len = tag.via.str.size;
+            }
 
             entry = root.via.array.ptr[1];
 
