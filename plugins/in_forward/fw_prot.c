@@ -245,10 +245,10 @@ static size_t receiver_to_unpacker(struct fw_conn *conn, size_t request_size,
 int fw_prot_process(struct fw_conn *conn)
 {
     int ret;
-    int stag_len;
+    int stag_len = 0;
     int c = 0;
     size_t chunk_id = -1;
-    const char *stag;
+    const char *stag = NULL;
     size_t bytes;
     size_t buf_off = 0;
     size_t recv_len;
@@ -367,8 +367,10 @@ int fw_prot_process(struct fw_conn *conn)
                 return -1;
             }
 
-            stag     = tag.via.str.ptr;
-            stag_len = tag.via.str.size;
+            if (!ctx->overwrite_tag) {
+                stag = tag.via.str.ptr;
+                stag_len = tag.via.str.size;
+            }
 
             entry = root.via.array.ptr[1];
 
