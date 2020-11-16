@@ -367,8 +367,10 @@ int fw_prot_process(struct fw_conn *conn)
                 return -1;
             }
 
-            stag     = tag.via.str.ptr;
-            stag_len = tag.via.str.size;
+            if (!ctx->overwrite_tag) {
+                stag = tag.via.str.ptr;
+                stag_len = tag.via.str.size;
+            }
 
             entry = root.via.array.ptr[1];
 
