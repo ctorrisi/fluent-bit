@@ -28,6 +28,7 @@ struct flb_in_fw_config {
     int server_fd;                  /* TCP server file descriptor  */
     size_t buffer_max_size;         /* Max Buffer size             */
     size_t buffer_chunk_size;       /* Chunk allocation size       */
+    bool overwrite_tag;             /* Overwrite tag?              */
 
     /* Network */
     char *listen;                   /* Listen interface            */
